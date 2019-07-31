@@ -11,7 +11,7 @@ def main():
         'image_folder',
         type=str,
         default='',
-        help='Path to image folder. The video will be created from these images.'
+        help='Path to folder of recorded images. The video will be created from these images.'
     )
     parser.add_argument(
         '--fps',
