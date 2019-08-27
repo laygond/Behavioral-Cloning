@@ -1,6 +1,6 @@
 # Behavioral Cloning Project
 
-In this project a regression deep neural network is used to clone driving behavior.  The model architecture written in Keras is [Nvidia's CNN](https://arxiv.org/pdf/1604.07316v1.pdf) with dropout to prevent overfitting during training. Image data from three front cameras is used as features and the vehicles steering angles as labels to train the neural network. Once trained, an image fed into the model will output a steering angle to an autonomous vehicle. To collect the data, Udacity's simulator is used to steer a car around a track. This repo uses [Udacity's CarND-Behavioral-Cloning repo](https://github.com/udacity/CarND-Behavioral-Cloning-P3/blob/master/writeup_template.md) for guidance.
+In this project a regression deep neural network is used to clone driving behavior.  The model architecture written in Keras is [Nvidia's CNN](https://arxiv.org/pdf/1604.07316v1.pdf) with dropout to prevent overfitting during training. Image data from three front cameras is used as features and the vehicles steering angles as labels to train the neural network. Once trained, an image fed into the model will output a steering angle to an autonomous vehicle. To collect the data, [Udacity's simulator](https://github.com/udacity/self-driving-car-sim) is used to steer a car around a track. This repo uses [Udacity's CarND-Behavioral-Cloning repo](https://github.com/udacity/CarND-Behavioral-Cloning-P3/blob/master/writeup_template.md) for guidance.
 
 [//]: # (List of Images used in this README.md)
 [image1]: ./README_images/visualization.gif "Visualization"
@@ -13,17 +13,22 @@ In this project a regression deep neural network is used to clone driving behavi
 
 ![alt text][image1]
 
-
 ## Directory Structure
 ```
+├── .gitignore                   # git file to prevent unnecessary files from being uploaded
+├── README_images                # Images used by README.md
+│   └── ...
+├── README.md
 ├── CarND-Behavioral-Cloning-P3
-│   ├── drive.py
-│   ├── model.h5
-│   ├── model.py
-│   ├── README_images
+│   ├── drive.p                  # test script: driving the car in autonomous mode (makes use of model.h5)
+│   ├── model.h5                 # trained Keras model ready for testing or keep training   
+│   ├── model.py                 # contains the script to create and train the model (generates model.h5)
+│   ├── README_images            # Images used by README.md
+|   │   └── ...
 │   ├── README.md
+|   ├── .gitignore               # git file to prevent unnecessary files from being uploaded
 │   ├── test.py
-│   └── video.py
+│   └── video.py                 # A script that makes a video from images.
 ├── MYDATA
 │   ├── custom.csv
 │   ├── driving_log.csv
@@ -37,25 +42,17 @@ In this project a regression deep neural network is used to clone driving behavi
 ├── udacity-logo.png
 └── workspace_utils.py
 ```
-
-
-To meet specifications, the project will require submitting five files: 
-* model.py (script used to create and train the model)
-* drive.py (script to drive the car - feel free to modify this file)
-* model.h5 (a trained Keras model)
-* a report writeup file (either markdown or pdf)
 * video.mp4 (a video recording of your vehicle driving autonomously around the track for at least one full lap)
-
 This README file describes how to output the video in the "Details About Files In This Directory" section.
 
 
-The Project
----
+## The Project Overview
+
 The goals / steps of this project are the following:
 * Use the simulator to collect data of good driving behavior 
 * Design, train and validate a model that predicts a steering angle from image data
-* Use the model to drive the vehicle autonomously around the first track in the simulator. The vehicle should remain on the road for an entire loop around the track.
-* Summarize the results with a written report
+* Use the model to drive the vehicle autonomously around the first track in the simulator. 
+
 
 ### Dependencies
 This lab requires:
@@ -68,8 +65,27 @@ The following resources can be found in this github repository:
 * drive.py
 * video.py
 * writeup_template.md
+## Dataset
+#### Udacity's Simulator
+The simulator can be downloaded [here](https://github.com/udacity/self-driving-car-sim) and a docker file can be found [here](https://github.com/udacity/CarND-Term1-Starter-Kit). The simulator allows you to chose training mode for collecting data or autonomous mode for testing your model. In either mode there are two tracks you can drive on. For this project we will only focus on track 1. The control display is also shown below.
 
-The simulator can be downloaded from the classroom. In the classroom, we have also provided sample data that you can optionally use to help train your model.
+![alt text][image1] ![alt text][image1]
+
+Additional Information:
+- You can takeover in autonomous mode while W or S are held down so you can control the car the same way you would in training mode. This can be helpful for debugging. As soon as W or S are let go autonomous takes over again.
+- Pressing the spacebar in training mode toggles on and off cruise control (effectively presses W for you).
+- In training mode you can stop and play the recording as many times as you want and all collected data will be appended to the folder you have specified. But if you close and reopen the session by setting the same folder path from before then it will be overwritten.
+
+#### Strategies for Collecting Data
+Now that you have driven the simulator and know how to record data, it's time to think about collecting data that will ensure a successful model. There are a few general concepts to think about that we will later discuss in more detail:
+
+the car should stay in the center of the road as much as possible
+if the car veers off to the side, it should recover back to center
+driving counter-clockwise can help the model generalize
+flipping the images is a quick way to augment the data
+collecting data from the second track can also help generalize the model
+we want to avoid overfitting or underfitting when training the model
+knowing when to stop collecting more data
 
 ## Details About Files In This Directory
 

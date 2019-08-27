@@ -70,7 +70,7 @@ validation_generator = generator(validation_samples, batch_size=batch_size)
 # plt.imshow(img)
 # plt.show()
 
-# Load or Define model
+# Load or Create model
 if("model.h5" in os.listdir(".")):
     # Load Model
     model = load_model("model.h5")
@@ -112,7 +112,7 @@ plt.title('model mean squared error loss')
 plt.ylabel('mean squared error loss')
 plt.xlabel('epoch')
 plt.legend(['training set', 'validation set'], loc='upper right')
-plt.savefig("data3", bbox_inches='tight')
+#plt.savefig("README_images/loss_graph", bbox_inches='tight')
 plt.show()
 
 
