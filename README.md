@@ -15,10 +15,6 @@ In this project a regression deep neural network is used to clone driving behavi
 
 ## Directory Structure
 ```
-├── .gitignore                   # git file to prevent unnecessary files from being uploaded
-├── README_images                # Images used by README.md
-│   └── ...
-├── README.md
 ├── CarND-Behavioral-Cloning-P3
 │   ├── drive.p                  # test script: driving the car in autonomous mode (makes use of model.h5)
 │   ├── model.h5                 # trained Keras model ready for testing or keep training   
@@ -29,29 +25,57 @@ In this project a regression deep neural network is used to clone driving behavi
 |   ├── .gitignore               # git file to prevent unnecessary files from being uploaded
 │   ├── test.py
 │   └── video.py                 # A script that makes a video from images.
-├── MYDATA
-│   ├── custom.csv
-│   ├── driving_log.csv
-│   ├── IMG
-│   └── max.csv
-├── __pycache__
-│   └── workspace_utils.cpython-35.pyc
-├── end_process.sh
-├── keep_alive.py
-├── simulator.desktop
-├── udacity-logo.png
-└── workspace_utils.py
+└── MYDATA                       # Data used for training and validation (not included in the repo)
+    ├── custom.csv
+    ├── driving_log.csv
+    ├── IMG
+    └── max.csv
 ```
+
+## The Project's Workflow
+The workflow of this project is the following:
+* Use the simulator in "training mode" to collect data of good driving behavior and place it in `MYDATA`
+* `model.py` uses the data in `MYDATA` to train and validate the model and saves it as `model.h5`
+* `drive.py` interacts with the simulator in "autonomous mode" to receive image data
+* `drive.py` uses `model.h5` to predict a steering angle from that image data and sends the angle back to the simulator.
+Therefore the simulator acts as a client and `drive.py` as the server.
+
+## Udacity's Simulator
+The simulator can be downloaded [here](https://github.com/udacity/self-driving-car-sim) and a docker file can be found [here](https://github.com/udacity/CarND-Term1-Starter-Kit). The simulator allows you to chose training mode for collecting data or autonomous mode for testing your model. In either mode there are two tracks you can drive on. For this project we will only focus on track 1. The control display is also shown below.
+
+![alt text][image1] ![alt text][image1]
+
+Additional Information:
+- You can takeover in autonomous mode while W or S are held down so you can control the car the same way you would in training mode. This can be helpful for debugging. As soon as W or S are let go autonomous takes over again.
+- Pressing the spacebar in training mode toggles on and off cruise control (effectively presses W for you).
+
+## Run simulation
+After you have installed the simulator set it in `autonomous mode`. Then open your terminal an type:
+
+```sh
+git clone https://github.com/laygond/Behavioral-Cloning.git
+cd Behavioral-Cloning
+python drive.py model.h5
+```
+The above command will load the trained model and use the model to make steering angle predictions on individual images in real-time
+
+#### Saving a video of your autonomous simulation
+By running the following commands it will save your simulation as single frame images in directory `output_run` (if the directory already exists, it'll be overwritten). Then based on images found in the `output_run` directory a video will be created with the name of the directory followed by `'.mp4'`, so, in this case the video will be `output_run.mp4`. Finally, and optionally, remove the directory `output_run` which is no longer needed.
+
+```sh
+python drive.py model.h5 output_run
+python video.py output_run
+rm -rf output_run
+```
+Alternatively, one can specify the FPS (frames per second) of the video. The default FPS is 60 if not specified:
+```sh
+python video.py output_run--fps 48
+```
+
+
 * video.mp4 (a video recording of your vehicle driving autonomously around the track for at least one full lap)
 This README file describes how to output the video in the "Details About Files In This Directory" section.
 
-
-## The Project Overview
-
-The goals / steps of this project are the following:
-* Use the simulator to collect data of good driving behavior 
-* Design, train and validate a model that predicts a steering angle from image data
-* Use the model to drive the vehicle autonomously around the first track in the simulator. 
 
 
 ### Dependencies
@@ -66,97 +90,40 @@ The following resources can be found in this github repository:
 * video.py
 * writeup_template.md
 ## Dataset
-#### Udacity's Simulator
-The simulator can be downloaded [here](https://github.com/udacity/self-driving-car-sim) and a docker file can be found [here](https://github.com/udacity/CarND-Term1-Starter-Kit). The simulator allows you to chose training mode for collecting data or autonomous mode for testing your model. In either mode there are two tracks you can drive on. For this project we will only focus on track 1. The control display is also shown below.
-
-![alt text][image1] ![alt text][image1]
-
-Additional Information:
-- You can takeover in autonomous mode while W or S are held down so you can control the car the same way you would in training mode. This can be helpful for debugging. As soon as W or S are let go autonomous takes over again.
-- Pressing the spacebar in training mode toggles on and off cruise control (effectively presses W for you).
 - In training mode you can stop and play the recording as many times as you want and all collected data will be appended to the folder you have specified. But if you close and reopen the session by setting the same folder path from before then it will be overwritten.
 
+If everything went correctly for recording data, you should see the following in the directory you selected. In my case I placed it in `MYDATA` at the same level directory as this repo as shown in `Directory Structure`
+- IMG folder - this folder contains all the frames of your driving.
+- driving_log.csv - each row in this sheet correlates your image with the steering angle, throttle, brake, and speed of your car. You'll mainly be using the steering angle.
+
+![alt text][image1]
+For this project we will only use the center camera images highlighted in gray and the steering angles. 
+
 #### Strategies for Collecting Data
-Now that you have driven the simulator and know how to record data, it's time to think about collecting data that will ensure a successful model. There are a few general concepts to think about that we will later discuss in more detail:
+Collecting data correctly will ensure a successful model:
 
-the car should stay in the center of the road as much as possible
-if the car veers off to the side, it should recover back to center
-driving counter-clockwise can help the model generalize
-flipping the images is a quick way to augment the data
-collecting data from the second track can also help generalize the model
-we want to avoid overfitting or underfitting when training the model
-knowing when to stop collecting more data
+- the car should stay in the center of the road as much as possible
+- if the car veers off to the side, it should recover back to center
+- driving counter-clockwise can help the model generalize
+- flipping the images is a quick way to augment the data
+- collecting data from the second track can also help generalize the model
+- we want to avoid overfitting or underfitting when training the model
+- knowing when to stop collecting more data
+- using the left and right cameraas if they were in the center by applying a small shift in the angle
 
-## Details About Files In This Directory
+#### Training and Validating Your Network
+In order to validate your network, you'll want to compare model performance on the training set and a validation set. The validation set should contain image and steering data that was not used for training. A rule of thumb could be to use 80% of your data for training and 20% for validation or 70% and 30%. Be sure to randomly shuffle the data before splitting into training and validation sets.
 
-### `drive.py`
+If model predictions are poor on both the training and validation set (for example, mean squared error is high on both), then this is evidence of underfitting. Possible solutions could be to
 
-Usage of `drive.py` requires you have saved the trained model as an h5 file, i.e. `model.h5`. See the [Keras documentation](https://keras.io/getting-started/faq/#how-can-i-save-a-keras-model) for how to create this file using the following command:
-```sh
-model.save(filepath)
-```
+increase the number of epochs
+add more convolutions to the network.
+When the model predicts well on the training set but poorly on the validation set (for example, low mean squared error for training set, high mean squared error for validation set), this is evidence of overfitting. If the model is overfitting, a few ideas could be to
 
-Once the model has been saved, it can be used with drive.py using this command:
+use dropout or pooling layers
+use fewer convolution or fewer fully connected layers
+collect more data or further augment the data set
 
-```sh
-python drive.py model.h5
-```
-
-The above command will load the trained model and use the model to make predictions on individual images in real-time and send the predicted angle back to the server via a websocket connection.
-
-Note: There is known local system's setting issue with replacing "," with "." when using drive.py. When this happens it can make predicted steering values clipped to max/min values. If this occurs, a known fix for this is to add "export LANG=en_US.utf8" to the bashrc file.
-
-# **Behavioral Cloning** 
-
-## Writeup Template
-
-### You can use this file as a template for your writeup if you want to submit it as a markdown file, but feel free to use some other method and submit a pdf if you prefer.
-
----
-
-**Behavioral Cloning Project**
-
-The goals / steps of this project are the following:
-* Use the simulator to collect data of good driving behavior
-* Build, a convolution neural network in Keras that predicts steering angles from images
-* Train and validate the model with a training and validation set
-* Test that the model successfully drives around track one without leaving the road
-* Summarize the results with a written report
-
-
-[//]: # (Image References)
-
-[image1]: ./examples/placeholder.png "Model Visualization"
-[image2]: ./examples/placeholder.png "Grayscaling"
-[image3]: ./examples/placeholder_small.png "Recovery Image"
-[image4]: ./examples/placeholder_small.png "Recovery Image"
-[image5]: ./examples/placeholder_small.png "Recovery Image"
-[image6]: ./examples/placeholder_small.png "Normal Image"
-[image7]: ./examples/placeholder_small.png "Flipped Image"
-
-## Rubric Points
-### Here I will consider the [rubric points](https://review.udacity.com/#!/rubrics/432/view) individually and describe how I addressed each point in my implementation.  
-
----
-### Files Submitted & Code Quality
-
-#### 1. Submission includes all required files and can be used to run the simulator in autonomous mode
-
-My project includes the following files:
-* model.py containing the script to create and train the model
-* drive.py for driving the car in autonomous mode
-* model.h5 containing a trained convolution neural network 
-* writeup_report.md or writeup_report.pdf summarizing the results
-
-#### 2. Submission includes functional code
-Using the Udacity provided simulator and my drive.py file, the car can be driven autonomously around the track by executing 
-```sh
-python drive.py model.h5
-```
-
-#### 3. Submission code is usable and readable
-
-The model.py file contains the code for training and saving the convolution neural network. The file shows the pipeline I used for training and validating the model, and it contains comments to explain how the code works.
 
 ### Model Architecture and Training Strategy
 
@@ -239,56 +206,6 @@ I used this training data for training the model. The validation set helped dete
 
 
 
-#### Saving a video of the autonomous agent
-
-```sh
-python drive.py model.h5 run1
-```
-
-The fourth argument, `run1`, is the directory in which to save the images seen by the agent. If the directory already exists, it'll be overwritten.
-
-```sh
-ls run1
-
-[2017-01-09 16:10:23 EST]  12KiB 2017_01_09_21_10_23_424.jpg
-[2017-01-09 16:10:23 EST]  12KiB 2017_01_09_21_10_23_451.jpg
-[2017-01-09 16:10:23 EST]  12KiB 2017_01_09_21_10_23_477.jpg
-[2017-01-09 16:10:23 EST]  12KiB 2017_01_09_21_10_23_528.jpg
-[2017-01-09 16:10:23 EST]  12KiB 2017_01_09_21_10_23_573.jpg
-[2017-01-09 16:10:23 EST]  12KiB 2017_01_09_21_10_23_618.jpg
-[2017-01-09 16:10:23 EST]  12KiB 2017_01_09_21_10_23_697.jpg
-[2017-01-09 16:10:23 EST]  12KiB 2017_01_09_21_10_23_723.jpg
-[2017-01-09 16:10:23 EST]  12KiB 2017_01_09_21_10_23_749.jpg
-[2017-01-09 16:10:23 EST]  12KiB 2017_01_09_21_10_23_817.jpg
-...
-```
-
-The image file name is a timestamp of when the image was seen. This information is used by `video.py` to create a chronological video of the agent driving.
-
-### `video.py`
-
-```sh
-python video.py run1
-```
-
-Creates a video based on images found in the `run1` directory. The name of the video will be the name of the directory followed by `'.mp4'`, so, in this case the video will be `run1.mp4`.
-
-Optionally, one can specify the FPS (frames per second) of the video:
-
-```sh
-python video.py run1 --fps 48
-```
-
-Will run the video at 48 FPS. The default FPS is 60.
-
-#### Why create a video
-
-1. It's been noted the simulator might perform differently based on the hardware. So if your model drives succesfully on your machine it might not on another machine (your reviewer). Saving a video is a solid backup in case this happens.
-2. You could slightly alter the code in `drive.py` and/or `video.py` to create a video of what your model sees after the image is processed (may be helpful for debugging).
 
 ### Tips
 - Please keep in mind that training images are loaded in BGR colorspace using cv2 while drive.py load images in RGB to predict the steering angles.
-
-## How to write a README
-A well written README file can enhance your project and portfolio.  Develop your abilities to create professional README files by completing [this free course](https://www.udacity.com/course/writing-readmes--ud777).
-
