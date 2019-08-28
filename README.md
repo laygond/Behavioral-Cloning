@@ -80,6 +80,7 @@ If everything went correctly for recording data, you should see the following in
 - driving_log.csv - each row in this sheet correlates your image with the steering angle, throttle, brake, and speed of your car.
 
 ![alt text][image1]
+
 For this project we will only use the center camera images highlighted in gray and the steering angles. 
 
 #### Strategies for Collecting Data
@@ -97,7 +98,7 @@ Collecting data correctly will ensure a successful model:
 
 ## Model
 #### Architecture
-The model architecture written in Keras is [Nvidia's CNN](https://arxiv.org/pdf/1604.07316v1.pdf) with dropout to prevent overfitting during training
+The model architecture written in Keras is [Nvidia's CNN](https://arxiv.org/pdf/1604.07316v1.pdf) with dropout to prevent overfitting during training. The neural network uses convolution layers with appropriate filter sizes. Layers exist to introduce nonlinearity into the model. The data is normalized in the model.
 ![alt text][image1]
 
 #### Training and Validating Your Network (Tips and Tricks from Udacity)
