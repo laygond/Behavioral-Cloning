@@ -1,15 +1,14 @@
 # Behavioral Cloning Project
 
-In this project a regression deep neural network is used to clone driving behavior.  The model architecture written in Keras is [Nvidia's CNN](https://arxiv.org/pdf/1604.07316v1.pdf) with dropout to prevent overfitting during training. Image data from three front cameras is used as features and the vehicles steering angles as labels to train the neural network. Once trained, an image fed into the model will output a steering angle to an autonomous vehicle. To collect the data, [Udacity's simulator](https://github.com/udacity/self-driving-car-sim) is used to steer a car around a track. This repo uses [Udacity's CarND-Behavioral-Cloning repo](https://github.com/udacity/CarND-Behavioral-Cloning-P3/blob/master/writeup_template.md) for guidance.
+In this project a regression deep neural network is used to clone driving behavior.  The model architecture written in Keras is [Nvidia's CNN](https://arxiv.org/pdf/1604.07316v1.pdf). As regularization techniques, data augmentation and dropouts have been added. Image data from three front cameras is used as features and the vehicles steering angles as labels to train the neural network. Once trained, an image fed into the model will output a steering angle to an autonomous vehicle. To collect the data, [Udacity's simulator](https://github.com/udacity/self-driving-car-sim) is used to steer a car around a track. This repo uses [Udacity's CarND-Behavioral-Cloning repo](https://github.com/udacity/CarND-Behavioral-Cloning-P3/blob/master/writeup_template.md) for guidance.
 
 [//]: # (List of Images used in this README.md)
-[image1]: ./README_images/visualization.gif "Visualization"
-[image2]: ./README_images/traffic_sign_catalog.png "Catalog"
-[image3]: ./README_images/train_set_dist.png "Training Set Distribution"
-[image4]: ./README_images/architecture.png "Model Architecture"
-[image5]: ./README_images/NNparam.png "Model Parameters"
-[image6]: ./README_images/traffic_signs.png "Traffic Signs"
-[image7]: ./README_images/stopinspect.png "Stop Sign Inspect"
+[image1]: ./README_images/behavior.gif "Visualization"
+[image2]: ./README_images/simulator.JPG "Simulator"
+[image3]: ./README_images/sim_control.JPG "Simulator Control"
+[image4]: ./README_images/frontview.gif "Video Ouput"
+[image5]: ./README_images/sample_of_log.JPG "Log Sample"
+[image6]: ./README_images/architecture.png "Model Architecture"
 
 ![alt text][image1]
 
@@ -41,11 +40,17 @@ The workflow of this project is the following:
 Therefore the simulator acts as a client and `drive.py` as the server.
 
 ## Udacity's Simulator
-The simulator can be downloaded [here](https://github.com/udacity/self-driving-car-sim) and a docker file can be found [here](https://github.com/udacity/CarND-Term1-Starter-Kit). The simulator allows you to chose training mode for collecting data or autonomous mode for testing your model. In either mode there are two tracks you can drive on. For this project we will only focus on track 1. The control display is also shown below.
+The simulator can be downloaded [here (Choose Term 1 Version)](https://github.com/udacity/self-driving-car-sim) and a docker file can be found [here](https://github.com/udacity/CarND-Term1-Starter-Kit). The simulator allows you to chose training mode for collecting data or autonomous mode for testing your model. In either mode there are two tracks you can drive on. For this project we will only focus on track 1. The control display is also shown below.
 
-![alt text][image1] ![alt text][image1]
+![alt text][image2] ![alt text][image3]
 
-Additional Information:
+Additional Installation Instructions for Unix based OS:
+Once the simulator's directory is downloaded and extracted, set file to executable for it to work
+```
+chmod +x beta_simulator.x86_64
+```
+
+Additional Control Information:
 - You can takeover in autonomous mode while W or S are held down so you can control the car the same way you would in training mode. This can be helpful for debugging. As soon as W or S are let go autonomous takes over again.
 - Pressing the spacebar in training mode toggles on and off cruise control (effectively presses W for you).
 
@@ -60,7 +65,7 @@ python drive.py model.h5
 The above command will load the trained model and use the model to make steering angle predictions on individual images in real-time
 
 #### Saving a video of your autonomous simulation
-By running the following commands it will save your simulation as single frame images in directory `output_run` (if the directory already exists, it'll be overwritten). Then based on images found in the `output_run` directory a video will be created with the name of the directory followed by `'.mp4'`, so, in this case the video will be `output_run.mp4`. Finally, and optionally, remove the directory `output_run` which is no longer needed.
+By running the following commands it will save your simulation as single frame images in directory `output_run` (if the directory already exists, it'll be overwritten). Then based on images found in the `output_run` directory the script `video.py` will create a video with the name of the directory followed by `'.mp4'`, so, in this case the video will be `output_run.mp4`. Finally, and optionally, remove the directory `output_run` which is no longer needed.
 
 ```sh
 python drive.py model.h5 output_run
@@ -71,6 +76,7 @@ Alternatively, one can specify the FPS (frames per second) of the video. The def
 ```sh
 python video.py output_run--fps 48
 ```
+![Video Output Sample: `output_run.mp4`][image4]
 
 ## Dataset
 The dataset is collected from the simulator. In training mode you can stop and play the recording as many times as you want and all collected data will be appended to the folder you have specified. But if you close and reopen the session by setting the same folder path from before then it will be overwritten.
@@ -79,7 +85,7 @@ If everything went correctly for recording data, you should see the following in
 - IMG folder - this folder contains all the frames of your driving during training mode.
 - driving_log.csv - each row in this sheet correlates your image with the steering angle, throttle, brake, and speed of your car.
 
-![alt text][image1]
+![alt text][image5]
 
 For this project we will only use the center camera images highlighted in gray and the steering angles. 
 
@@ -99,7 +105,7 @@ Collecting data correctly will ensure a successful model:
 ## Model
 #### Architecture
 The model architecture written in Keras is [Nvidia's CNN](https://arxiv.org/pdf/1604.07316v1.pdf) with dropout to prevent overfitting during training. The neural network uses convolution layers with appropriate filter sizes. Layers exist to introduce nonlinearity into the model. The data is normalized in the model.
-![alt text][image1]
+![alt text][image6]
 
 #### Training and Validating Your Network (Tips and Tricks from Udacity)
 In order to validate your network, you'll want to compare model performance on the training set and a validation set. The validation set should contain image and steering data that was not used for training. A rule of thumb could be to use 80% of your data for training and 20% for validation or 70% and 30%. Be sure to randomly shuffle the data before splitting into training and validation sets.
