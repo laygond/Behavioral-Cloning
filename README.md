@@ -42,9 +42,12 @@ Therefore the simulator acts as a client and `drive.py` as the server.
 ## Udacity's Simulator
 The simulator can be downloaded [here (Choose Term 1 Version)](https://github.com/udacity/self-driving-car-sim) and a docker file can be found [here](https://github.com/udacity/CarND-Term1-Starter-Kit). The simulator allows you to chose training mode for collecting data or autonomous mode for testing your model. In either mode there are two tracks you can drive on. For this project we will only focus on track 1. The control display is also shown below.
 
-![alt text][image2] ![alt text][image3]
+Main Menu | Controls
+:---:|:---:
+![alt text][image2] |  ![alt text][image3]
 
 Additional Installation Instructions for Unix based OS:
+
 Once the simulator's directory is downloaded and extracted, set file to executable for it to work
 ```
 chmod +x beta_simulator.x86_64
