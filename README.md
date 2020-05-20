@@ -79,7 +79,8 @@ Alternatively, one can specify the FPS (frames per second) of the video. The def
 ```sh
 python video.py output_run--fps 48
 ```
-![Video Output Sample: `output_run.mp4`][image4]
+Video Output Sample: `output_run.mp4`
+![alt text][image4]
 
 ## Dataset
 The dataset is collected from the simulator. In training mode you can stop and play the recording as many times as you want and all collected data will be appended to the folder you have specified. But if you close and reopen the session by setting the same folder path from before then it will be overwritten.
@@ -103,7 +104,7 @@ Collecting data correctly will ensure a successful model:
 
 #### Data Augmentation
 - augment data by using the left and right cameras as if they were in the center and apply correction to angle
-- flipping the images is a quick way to augment the data
+- flipping the images (and steering angles) is a quick way to augment the data
 
 ## Model
 #### Architecture
