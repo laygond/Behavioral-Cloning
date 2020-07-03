@@ -96,7 +96,7 @@ Video Output Sample: `output_run.mp4`
 ![alt text][image4]
 
 ## Project Analysis
-#### Dataset
+### Dataset
 The dataset is collected from the simulator. In training mode you can stop and play the recording as many times as you want and all collected data will be appended to the folder you have specified. But if you close and reopen the session by setting the same folder path from before then it will be overwritten.
 
 If everything went correctly for recording data, you should see the following in the directory you selected. In my case I placed it in `MYDATA` at the same level directory as this repo as shown in `Directory Structure`
@@ -111,7 +111,7 @@ For this project we will use the center, left, and right camera images and the s
 - Break or Reverse Throttle [0,1] 
 - Speeed in mph
 
-#### Strategies for Collecting and Cleaning the Data
+### Strategies for Collecting and Cleaning the Data
 Collecting data correctly will ensure a successful model. Collect data of car:
 - staying in the center of the road as much as possible
 - veering off to the side and recovering back to center
@@ -152,7 +152,7 @@ Original vs. Clean Custom Data
 
 After the data has been purged, 80% will be used for training and 20% for validation. By running `python model.py` the data will preprocess & augmented, and the model trained.
 
-#### Data Augmentation and Preprocessing
+### Data Augmentation and Preprocessing
 The following tricks will be implemented to augment training data by a factor of 12.
 - Augmenting data by using the left and right cameras as if they were in the center by applying correction to angle. This augments data by a factor of 3. In the following, one line of the `custom.csv` file is a `batch_sample`.
 ```
@@ -190,7 +190,7 @@ def shadow(img):
 ![alt text][image8]
 - Cropping the region of interest and normalization is done directly by the model as seen in the model architecture code in the next section. When done by the model, these preprocessing functions are executed in batches rather than a single batch_sample.  
 
-#### Model Architecture
+### Model Architecture
 The model architecture written in Keras is taken from [Nvidia's paper](https://arxiv.org/pdf/1604.07316v1.pdf). As regularization techniques, data augmentation has been implemented. The neural network is quite simple. It uses a series of convolution layers followed by relu activations with appropriate filter sizes. Then it is flatten to go through a sries of fully connected layers. The input data is normalized and cropped at the beginning of the model.
 
 ![alt text][image9]
@@ -215,7 +215,7 @@ model.compile(loss='mse', optimizer= Adam(lr = 1e-4))
 ```
 The model was trained using Adam optimiser with a learning rate = 1e-04 and mean squared error as a loss function. 20% of the collected data was used for validation.
 
-#### Results
+### Results
 To test the car we will use Track 2 previously unseen.
 
 ![alt text][image1]
