@@ -121,8 +121,11 @@ To clean the data collected I have created an easy tool that can be run from ter
 ```
 python clean_data.py --input driving_log.csv --output custom.csv
 ```
+Distribution of Steering Angle: Original vs. Clean Custom Data
 
-This cleaning will:
+![alt text][image6]
+
+This cleaning tool will:
 - Remove last 5 seconds of data (I always ended up crashing the car at the end of the simulation)
 ```
 fps = 30        #data points per second
@@ -146,11 +149,7 @@ for end in np.linspace(0, 1, num=bins):
     start = end
 ```
 
-Original vs. Clean Custom Data
-
-![alt text][image6]
-
-After the data has been purged, 80% will be used for training and 20% for validation. By running `python model.py` the data will preprocess & augmented, and the model trained.
+After the data has been purged, 80% will be used for training and 20% for validation. By running `python model.py` the data will preprocessed & augmented, and the model trained.
 
 ### Data Augmentation and Preprocessing
 The following tricks will be implemented to augment training data by a factor of 12.
