@@ -149,7 +149,7 @@ for end in np.linspace(0, 1, num=bins):
     start = end
 ```
 
-After the data has been purged, 80% will be used for training and 20% for validation. By running `python model.py` the data will preprocessed & augmented, and the model trained.
+After the data has been purged, 80% will be used for training and 20% for validation. By running `python model.py` the data will be preprocessed & augmented, and the model trained.
 
 ### Data Augmentation and Preprocessing
 The following tricks will be implemented to augment training data by a factor of 12.
