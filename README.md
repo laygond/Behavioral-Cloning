@@ -23,6 +23,7 @@ In this project an end-to-end deep neural network is used to clone driving behav
 │   ├── drive.py                 # test script: driving the car in autonomous mode (makes use of model.h5)
 │   ├── model.h5                 # trained Keras model ready for testing or keep training   
 │   ├── model.py                 # contains the script to create and train the model (generates model.h5)
+│   ├── clean_data.py			 # creates a clean custom.csv from driving_log.csv for model.py to use
 │   ├── README_images            # Images used by README.md
 |   │   └── ...
 │   ├── README.md
@@ -33,8 +34,8 @@ In this project an end-to-end deep neural network is used to clone driving behav
 └── MYDATA                       # Data used for training and validation (not included in the repo)
     ├── custom.csv
     ├── driving_log.csv
-    ├── IMG
-    └── max.csv
+    └── IMG
+    
 ```
 
 The workflow of this project is the following:
@@ -119,7 +120,7 @@ Collecting data correctly will ensure a successful model. Collect data of car:
 
 To clean the data collected I have created an easy tool that can be run from terminal.
 ```
-python clean_data.py --input driving_log.csv --output custom.csv
+python clean_data.py --input ../MYDATA/driving_log.csv --output ../MYDATA/custom.csv
 ```
 Distribution of Steering Angle: Original vs. Clean Custom Data
 
