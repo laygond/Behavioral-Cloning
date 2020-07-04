@@ -39,6 +39,9 @@ df = df.head(-fps*5)
 # Keep only data with forward speed higher than 5mph to purge starting of engine
 df = df.loc[(df["throttle"] > 0) & (df["speed"] > 5)]
 
+# Shuffle data
+df = df.sample(frac=1)      #fraction of rows to return in random order
+
 # Even out steering angle data to prevent model from being bias
 # Create histogram of steering angles and clip data
 custom = pd.DataFrame() 	# custom balanced dataset
@@ -53,7 +56,7 @@ for end in np.linspace(0, 1, num=bins):
     start = end
 
 # Save output as csv
-custom.to_csv(args["output"], index=False)
+custom.to_csv(args["output"], index=False, header=False)
 
 
 # #%%
