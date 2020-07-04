@@ -1,1 +1,4 @@
 set_git.sh
+output_run/
+README_images/graph.png
+data
