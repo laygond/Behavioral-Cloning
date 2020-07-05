@@ -23,7 +23,7 @@ In this project an end-to-end deep neural network is used to clone driving behav
 │   ├── drive.py                 # test script: driving the car in autonomous mode (makes use of model.h5)
 │   ├── model.h5                 # trained Keras model ready for testing or keep training   
 │   ├── model.py                 # contains the script to create and train the model (generates model.h5)
-│   ├── clean_data.py			 # creates a clean custom.csv from driving_log.csv for model.py to use
+│   ├── clean_data.py			       # creates a clean custom.csv from driving_log.csv for model.py to use
 │   ├── README_images            # Images used by README.md
 |   │   └── ...
 │   ├── README.md
@@ -135,6 +135,10 @@ df = df.head(-fps*5)
 - Keep only data with forward speed higher than 5mph to purge starting of engine ( I used to steer left & right before starting)
 ```
 df = df.loc[(df["throttle"] > 0) & (df["speed"] > 5)]
+```
+- Shuffle data
+```
+df = df.sample(frac=1)      #fraction of rows to return in random order
 ```
 - Even out distribution of steering angle data to prevent model from being bias; i.e., create a histogram of steering angles of about 1000 bins and clip bin at a max of 200 steering angle values.
 ```
