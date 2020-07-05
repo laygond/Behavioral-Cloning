@@ -35,9 +35,9 @@ df = pd.read_csv(args["input"], header=None, names=header_names)
 fps = 30        #data points per second
 df = df.head(-fps*5)
 
-# I used to steer left and right before starting
-# Keep only data with forward speed higher than 5mph to purge starting of engine
-df = df.loc[(df["throttle"] > 0) & (df["speed"] > 5)]
+# # I used to steer left and right before starting
+# # Keep only data with forward speed higher than 5mph to purge starting of engine
+# df = df.loc[(df["throttle"] > 0) & (df["speed"] > 5)]
 
 # Shuffle data
 df = df.sample(frac=1)      #fraction of rows to return in random order
@@ -60,8 +60,25 @@ custom.to_csv(args["output"], index=False, header=False)
 
 
 # #%%
-# # ------- Comparison between original and custom dataframes --------
+# # Comparison between original and custom dataframes
+# import pandas as pd
+
+# # Since our dataset does not include a header, set header=None and define header names
+# header_names =[
+#     'center', 'left', 'right',   # Camera Images directory path
+#     'steering',                  # steering angle between [-1,1]
+#     'throttle',                  # Trottle between [0,1]
+#     'break',                     # Break or Reverse Throttle [0,1] 
+#     'speed'                      # Speeed in mph
+# ]
+# path1 = "../MYDATA/driving_log.csv"
+# path2 = "../MYDATA/custom.csv"
+
+# df = pd.read_csv(path1, header=None, names=header_names)
+# custom = pd.read_csv(path2, header=None, names=header_names)
+
 # # Create a temporal dataframe to make all steering positive and plot histogram
+# bins=1000
 # tmp = df 
 # tmp.loc[tmp["steering"] < 0 ,  "steering"] *=-1
 # tmp["steering"].hist(bins=bins)
