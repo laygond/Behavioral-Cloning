@@ -23,7 +23,7 @@ In this project an end-to-end deep neural network is used to clone driving behav
 │   ├── drive.py                 # test script: driving the car in autonomous mode (makes use of model.h5)
 │   ├── model.h5                 # trained Keras model ready for testing or keep training   
 │   ├── model.py                 # contains the script to create and train the model (generates model.h5)
-│   ├── clean_data.py			       # creates a clean custom.csv from driving_log.csv for model.py to use
+│   ├── clean_data.py            # creates a clean custom.csv from driving_log.csv for model.py to use
 │   ├── README_images            # Images used by README.md
 |   │   └── ...
 │   ├── README.md
@@ -53,7 +53,7 @@ cd Behavioral-Cloning
 mkvirtualenv BehavioralEnv -p python3   # Recommended
 pip install -r requirements.txt         # Or install manually
 ```
-type `deactivate` in terminal to exit environment.
+type `deactivate` in terminal to exit environment and `workon BehavioralEnv` to reactivate it.
 
 ## Udacity's Simulator
 The simulator can be downloaded [here (Choose Term 1 Version)](https://github.com/udacity/self-driving-car-sim) and a docker file can be found [here](https://github.com/udacity/CarND-Term1-Starter-Kit). The simulator allows you to chose training mode for collecting data or autonomous mode for testing your model. In either mode there are two tracks you can drive on. For this project we will only focus our training on track 1. The control display is also shown below.
@@ -79,23 +79,6 @@ python drive.py model.h5
 ```
 The above command will load the trained model and use the model to make steering angle predictions on individual images in real-time
 
-#### Saving a video of your autonomous simulation
-By running the following commands it will save your simulation as single frame images in directory `output_run` (if the directory already exists, it'll be overwritten). Then based on images found in the `output_run` directory the script `video.py` will create a video with the name of the directory followed by `'.mp4'`, so, in this case the video will be `output_run.mp4`. Finally, and optionally, remove the directory `output_run` which is no longer needed.
-
-```sh
-python drive.py model.h5 output_run
-python video.py output_run
-rm -rf output_run
-```
-Alternatively, one can specify the FPS (frames per second) of the video. The default FPS is 60 if not specified:
-```sh
-python video.py output_run --fps 48
-```
-
-Video Output Sample: `output_run.mp4`
-
-![alt text][image4]
-
 ## Project Analysis
 ### Dataset
 The dataset is collected from the simulator. In training mode you can stop and play the recording as many times as you want and all collected data will be appended to the folder you have specified. But if you close and reopen the session by setting the same folder path from before then it will be overwritten.
@@ -113,7 +96,7 @@ For this project we will use the center, left, and right camera images and the s
 - Speeed in mph
 
 ### Strategies for Collecting and Cleaning the Data
-Collecting data correctly will ensure a successful model. Collect data of car:
+Collecting data correctly will ensure a successful model. I collected 45 min of data of car:
 - staying in the center of the road as much as possible
 - veering off to the side and recovering back to center
 - driving counter-clockwise can help the model generalize
@@ -122,7 +105,7 @@ To clean the data collected I have created an easy tool that can be run from ter
 ```
 python clean_data.py --input ../MYDATA/driving_log.csv --output ../MYDATA/custom.csv
 ```
-Distribution of Steering Angle: Original vs. Clean Custom Data
+Distribution of Absolute Steering Angles: Original (Blue) vs. Clean Custom Data (Orange)
 
 ![alt text][image6]
 
@@ -195,7 +178,7 @@ def shadow(img):
 - Cropping the region of interest and normalization is done directly by the model as seen in the model architecture code in the next section. When done by the model, these preprocessing functions are executed in batches rather than a single batch_sample.  
 
 ### Model Architecture
-The model architecture written in Keras is taken from [Nvidia's paper](https://arxiv.org/pdf/1604.07316v1.pdf). As regularization techniques, data augmentation has been implemented. The neural network is quite simple. It uses a series of convolution layers followed by relu activations with appropriate filter sizes. Then it is flatten to go through a sries of fully connected layers. The input data is normalized and cropped at the beginning of the model.
+The model architecture written in Keras is taken from [Nvidia's paper](https://arxiv.org/pdf/1604.07316v1.pdf). As regularization techniques, data augmentation has been implemented to prevent overfitting. The neural network is quite simple; it uses a series of convolution layers followed by relu activations with appropriate filter sizes. Then it is flatten to go through a series of fully connected layers. The input data is normalized and cropped at the beginning of the model.
 
 ![alt text][image9]
 
@@ -217,7 +200,7 @@ model.add(Dense(10))
 model.add(Dense(1))
 model.compile(loss='mse', optimizer= Adam(lr = 1e-4))
 ```
-The model was trained using Adam optimiser with a learning rate = 1e-04 and mean squared error as a loss function. 20% of the collected data was used for validation.
+The model was trained using Adam optimiser with a learning rate = 1e-04 and mean squared error as a loss function. 20% of the collected data was used for validation. The model was run for 30 epochs with batch sizes of 32.
 
 ### Results
 To test the car we will use Track 2 previously unseen.
@@ -225,3 +208,21 @@ To test the car we will use Track 2 previously unseen.
 ![alt text][image1]
 
 The car stays in the center of the lane for the entire track showing the efficiency of the model and the techniques implemented. 
+
+## Extra
+### Saving a video 
+By running the following commands it will save your simulation as single frame images in directory `output_run` (if the directory already exists, it'll be overwritten). Then based on images found in the `output_run` directory the script `video.py` will create a video with the name of the directory followed by `'.mp4'`, so, in this case the video will be `output_run.mp4`. Finally, and optionally, remove the directory `output_run` which is no longer needed.
+
+```sh
+python drive.py model.h5 output_run
+python video.py output_run
+rm -rf output_run
+```
+Alternatively, one can specify the FPS (frames per second) of the video. The default FPS is 60 if not specified:
+```sh
+python video.py output_run --fps 48
+```
+
+Video Output Sample: `output_run.mp4`
+
+![alt text][image4]
