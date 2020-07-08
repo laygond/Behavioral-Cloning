@@ -55,12 +55,6 @@ def generator(samples, batch_size=32):
                     angle = float(batch_sample[3]) + angle_correction[camera_position]
                     
                     # Add and Augment Data
-#                     # Normal
-#                     images.append(image)
-#                     angles.append(angle)
-#                     # Flipped
-#                     images.append(cv2.flip(image,1))
-#                     angles.append(angle*-1.0)
                     # Shadow
                     images.append(shadow(image))
                     angles.append(angle)
@@ -102,9 +96,9 @@ validation_generator = generator(validation_samples, batch_size=batch_size)
 # plt.show()
 
 # Load or Create model
-if("sexy_model3.h5" in os.listdir(".")):
+if("sexy_model2.h5" in os.listdir(".")):
     # Load Model
-    model = load_model("sexy_model3.h5")
+    model = load_model("sexy_model2.h5")
 else:
     # Model Net
     model = Sequential()
@@ -128,10 +122,10 @@ history_object = model.fit_generator(train_generator,
                     steps_per_epoch=ceil(len(train_samples)/batch_size), 
                     validation_data=validation_generator, 
                     validation_steps=ceil(len(validation_samples)/batch_size), 
-                    epochs=60, verbose=1)
+                    epochs=7, verbose=1)
 
 # Save model
-model.save('sexy_model3.h5')
+model.save('sexy_model2.h5')
 
 # print the keys contained in the history object
 print(history_object.history.keys())
