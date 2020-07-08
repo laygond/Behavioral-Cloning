@@ -7,7 +7,7 @@ In this project an end-to-end deep neural network is used to clone driving behav
 </p>
 
 [//]: # (List of Images used in this README.md)
-[image1]: ./README_images/test_track2.gif "Track 2 Test"
+[image1]: ./README_images/track2.gif "Track 2 Test"
 [image2]: ./README_images/simulator.JPG "Simulator"
 [image3]: ./README_images/sim_control.JPG "Simulator Control"
 [image4]: ./README_images/frontview.gif "Video Ouput"
